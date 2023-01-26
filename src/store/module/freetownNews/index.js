@@ -8,12 +8,12 @@ Vue.use(Vuex);
 
 const state = {
   list: [],
-  news: [],
+  // news: [],
   jobs: [],
   asks: [],
   user: {},
   item: {},
-  contents: [
+  news: [
     {
       id: 1,
       title: "1 대한민국을 응원합니다!",
@@ -38,6 +38,8 @@ const state = {
       content: "간단한 글 내용입니다.",
       date_at: "2023-01-14",
     },
+  ],
+  meetings: [
     {
       id: 5,
       title: "5 대한민국을 응원합니다!",
@@ -62,6 +64,8 @@ const state = {
       content: "간단한 글 내용입니다.",
       date_at: "2023-01-14",
     },
+  ],
+  photos: [
     {
       id: 9,
       title: "9 대한민국을 응원합니다!",
@@ -113,6 +117,15 @@ const getters = {
   },
   fetchContents(state) {
     return state.contents;
+  },
+  fetchNews({ news }) {
+    return news;
+  },
+  fetchMeetings(state) {
+    return state.meetings;
+  },
+  fetchPhotos(state) {
+    return state.photos;
   },
 };
 

@@ -5,7 +5,7 @@
       <div
         class="m-4 mt-6 mb-3 relative text-bold text-xl text-bold pb-2 border border-b-gray-200 border-white"
       >
-        <div class="right-0 absolute text-sm text-gray-400 rounded">
+        <!-- <div class="right-0 absolute text-sm text-gray-400 rounded">
           더보기
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -21,11 +21,11 @@
               d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
-        </div>
-        내 지갑
+        </div> -->
+        {{ section }}
       </div>
       <draggable
-        group="group"
+        :group="{ name: groupName, pull: false, put: false }"
         tag="ul"
         ghost-class="ghost"
         handle=".handle"
@@ -129,7 +129,7 @@
           </li>
         </transition-group>
       </draggable>
-      <div class="flex flex-row justify-center space-x-2 py-4">
+      <!-- <div class="flex flex-row justify-center space-x-2 py-4">
         <button
           class="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded"
           @click="emitEvent('sendKakaoFeed')"
@@ -142,7 +142,7 @@
         >
           공유하기(리스트)
         </button>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -154,6 +154,14 @@ export default {
     draggable,
   },
   props: {
+    section: {
+      type: String,
+      default: "",
+    },
+    groupName: {
+      type: String,
+      default: "group",
+    },
     value: {
       type: Array,
       default: () => [],
@@ -220,7 +228,11 @@ export default {
       return toCount > fromCount;
     },
     emitEvent(eventName, item = undefined) {
-      this.$emit(eventName, item ? item.id : undefined);
+      this.$emit(
+        eventName,
+        this.groupName ? this.groupName : undefined,
+        item ? item.id : undefined
+      );
     },
     beforeLeave(el) {
       const { marginLeft, marginTop, width, height } =
