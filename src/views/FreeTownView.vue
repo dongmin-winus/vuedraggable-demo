@@ -21,8 +21,11 @@
         </svg>
       </div>
     </div>
-    <draggable :list="menuData" ghost-class="ghost">
+    <draggable :list="menuData" handle=".handle" ghost-class="ghost">
       <div v-for="element in menuData" :key="element.id">
+        <div class="mt-4 mr-2 ml-2">
+          <i class="fa fa-align-justify handle"></i>
+        </div>
         <FreetownTransition2
           :section="element.section"
           :groupName="element.groupName"
