@@ -21,37 +21,24 @@
         </svg>
       </div>
     </div>
-    <draggable :list="menuData" handle=".handle" ghost-class="ghost">
-      <div v-for="element in menuData" :key="element.id">
-        <div class="mt-4 mr-2 ml-2">
-          <i class="fa fa-align-justify handle"></i>
-        </div>
-        <FreetownTransition2
-          :section="element.section"
-          :groupName="element.groupName"
-          v-model="element.contents"
-          @deleteClick="deleteFromList"
-        />
-      </div>
-      <!-- <FreetownTransition2
-        :section="'마을소식'"
-        :groupName="'news'"
-        v-model="news"
-        @deleteClick="deleteFromList"
-      />
-      <FreetownTransition2
-        :section="'마을모임'"
-        :groupName="'meetings'"
-        v-model="meetings"
-        @deleteClick="deleteFromList"
-      />
-      <FreetownTransition2
-        :section="'마을포토'"
-        :groupName="'photos'"
-        v-model="photos"
-        @deleteClick="deleteFromList"
-      /> -->
-    </draggable>
+    <FreetownTransition2
+      :section="'마을소식'"
+      :groupName="'news'"
+      v-model="news"
+      @deleteClick="deleteFromList"
+    />
+    <FreetownTransition2
+      :section="'마을모임'"
+      :groupName="'meetings'"
+      v-model="meetings"
+      @deleteClick="deleteFromList"
+    />
+    <FreetownTransition2
+      :section="'마을포토'"
+      :groupName="'photos'"
+      v-model="photos"
+      @deleteClick="deleteFromList"
+    />
     <div class="flex flex-row justify-center space-x-2 py-4">
       <button
         class="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded"
@@ -71,7 +58,6 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import draggable from "vuedraggable";
 import FreetownTransition2 from "../components/FreetownTransition2.vue";
 // import dataFetchingMixin from '../mixins/dataFetchingMixin.js';
 const WEB_URL = process.env.VUE_APP_WEB_URL;
@@ -79,7 +65,6 @@ const MOBILE_URL = process.env.VUE_APP_MOBILE_URL;
 export default {
   components: {
     FreetownTransition2,
-    draggable,
   },
   computed: {
     ...mapGetters(["fetchNews", "fetchMeetings", "fetchPhotos"]),
