@@ -152,7 +152,11 @@ export default {
      * 카카오 공유하기 피드
      */
     sendKakaoFeed() {
-      const content = this.fetchContents[0];
+      const content = this.makeShareList()[0] || undefined;
+      if (!content) {
+        alert("리스트 공유시 1개 이상의 콘텐츠가 필요합니다.");
+        return;
+      }
       window.Kakao.Share.sendDefault({
         objectType: "feed",
         content: {
@@ -184,11 +188,12 @@ export default {
      * 카카오 공유하기 리스트
      */
     sendKakaoList() {
-      if (this.fetchContents.length < 2) {
+      const content = this.makeShareList();
+      if (content.length < 2) {
         alert("리스트 공유시 2개 이상의 콘텐츠가 필요합니다.");
         return;
       }
-      const listContents = this.fetchContents.slice(0, 3).map((item) => ({
+      const listContents = content.slice(0, 3).map((item) => ({
         title: item.title,
         description: item.date_at,
         imageUrl: "https://picsum.photos/200/300",
@@ -217,11 +222,18 @@ export default {
       });
     },
     /**
+     * @return Array
+     */
+    makeShareList() {
+      return [...this.news, ...this.meetings, ...this.photos];
+    },
+    /**
      * 리스트에서 지우고 스토어 뮤테이션 발생
      */
     deleteFromList(groupName, id) {
       // const newList = this.fetchContents.filter((row) => row.id !== id);
-      // this.UPDATE_CONTENTS(newList); //업데이트는 클라이언트 스토어만 변경됨, 서버와 fetching 필요함
+      // this.UPDATE_CONTENTS(newList);
+      //현재 뮤테이션은 클라이언트 스토어만 변경됨, 서버와 fetching 필요함(saveContents() 메서드 참고)
       let newList;
       switch (groupName) {
         case "news":
@@ -241,7 +253,8 @@ export default {
       }
     },
     /**
-     * 현재 콘텐츠 저장하기
+     * delete나 순서를 변경후 저장한 현재 상태를 저쟝하는 기능
+     * TODO 저장시 서버와 통신 필요 (뮤테이션시 일일이 저장하지말고 한꺼번에 통신해야할듯 w/ promise.All)
      */
     saveContents() {
       this.isEditMode = false;
