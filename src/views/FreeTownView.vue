@@ -3,54 +3,72 @@
     <div
       class="m-4 mt-6 mb-3 relative text-bold text-xl text-bold pb-2 border border-b-gray-200 border-white"
     >
-      <div class="right-0 absolute text-sm text-gray-400 rounded">
-        편집
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="inline-block w-5 h-5"
+      <transition name="slide">
+        <div
+          class="right-0 absolute text-sm text-gray-400 rounded"
+          @click="enterEditMode"
+          v-show="!isEditMode"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
-      </div>
+          편집
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="inline-block w-5 h-5"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+        </div>
+      </transition>
     </div>
     <FreetownTransition2
       :section="'마을소식'"
       :groupName="'news'"
+      :isEditMode="isEditMode"
       v-model="news"
       @deleteClick="deleteFromList"
     />
     <FreetownTransition2
       :section="'마을모임'"
       :groupName="'meetings'"
+      :isEditMode="isEditMode"
       v-model="meetings"
       @deleteClick="deleteFromList"
     />
     <FreetownTransition2
       :section="'마을포토'"
       :groupName="'photos'"
+      :isEditMode="isEditMode"
       v-model="photos"
       @deleteClick="deleteFromList"
     />
     <div class="flex flex-row justify-center space-x-2 py-4">
       <button
+        v-show="!isEditMode"
         class="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded"
         @click="sendKakaoFeed"
       >
         공유하기(피드)
       </button>
       <button
+        v-show="!isEditMode"
         class="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded"
         @click="sendKakaoList"
       >
         공유하기(리스트)
+      </button>
+      <button
+        v-show="isEditMode"
+        class="bg-blue-400 hover:bg-blue-500 text-black font-bold py-2 px-4 rounded"
+        @click="saveContents"
+      >
+        저장하기
       </button>
     </div>
   </div>
@@ -118,11 +136,18 @@ export default {
   data() {
     return {
       menuData: [],
+      isEditMode: false,
     };
   },
   // mixins: [dataFetchingMixin],
   methods: {
     ...mapActions(["UPDATE_NEWS", "UPDATE_MEETINGS", "UPDATE_PHOTOS"]),
+    /**
+     * 편집모드 진입
+     */
+    enterEditMode() {
+      this.isEditMode = true;
+    },
     /**
      * 카카오 공유하기 피드
      */
@@ -215,6 +240,12 @@ export default {
           break;
       }
     },
+    /**
+     * 현재 콘텐츠 저장하기
+     */
+    saveContents() {
+      this.isEditMode = false;
+    },
   },
 };
 </script>
@@ -222,5 +253,42 @@ export default {
 .ghost {
   opacity: 0.1;
   background: #c8ebfb;
+}
+/* Slide transition using Animation property of CSS */
+.slide-enter {
+  /* keyframe에 이미 초기 상태를 정의해놔서 여기에 정의 안해도 됨 */
+}
+
+.slide-enter-active {
+  animation: slide-in 1s ease-out forwards;
+  /* forwards = element가 finishing position에 붙어놓음  */
+  transition: opacity 0.5s;
+}
+
+.slide-leave {
+}
+
+.slide-leave-active {
+  animation: slide-out 1s ease-out forwards;
+  transition: opacity 0.5s;
+  opacity: 0;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(20px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-out {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(20px);
+  }
 }
 </style>

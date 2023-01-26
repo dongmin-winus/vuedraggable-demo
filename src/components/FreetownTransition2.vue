@@ -5,28 +5,10 @@
       <div
         class="m-4 mt-6 mb-3 relative text-bold text-xl text-bold pb-2 border border-b-gray-200 border-white"
       >
-        <!-- <div class="right-0 absolute text-sm text-gray-400 rounded">
-          더보기
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="inline-block w-5 h-5"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-        </div> -->
         {{ section }}
       </div>
       <draggable
         :group="{ name: groupName, pull: false, put: false }"
-        tag="ul"
         ghost-class="ghost"
         handle=".handle"
         :value="realValue"
@@ -36,12 +18,14 @@
         @start="drag = true"
         @end="drag = false"
       >
-        <transition-group type="transition" :name="'list'">
+        <transition-group tag="ul" type="transition" :name="'list'">
           <li v-for="row in realValue" :key="row.id">
             <div class="flex m-4">
-              <div class="mt-4 mr-2">
-                <i class="fa fa-align-justify handle"></i>
-              </div>
+              <transition name="slide">
+                <div class="mt-4 mr-2" v-show="isEditMode">
+                  <i class="fa fa-align-justify handle"></i>
+                </div>
+              </transition>
               <div class="flex-shrink-0 sm:mb-0 mr-4">
                 <img
                   class="w-20 h-20 border border-gray-300 bg-white text-gray-300"
@@ -117,32 +101,20 @@
                   </div>
                 </div>
               </div>
-              <div class="absolute right-0 mr-1 mt-4">
-                <button
-                  class="bg-gray-300 focus:bg-red-300 text-white font-bold w-18 h-9 py-2 px-2 rounded"
-                  @click="emitEvent('deleteClick', row)"
-                >
-                  지우기
-                </button>
-              </div>
+              <transition name="slide">
+                <div class="absolute right-0 mr-1 mt-4" v-show="isEditMode">
+                  <button
+                    class="bg-gray-300 focus:bg-red-300 text-white font-bold w-18 h-9 py-2 px-2 rounded"
+                    @click="emitEvent('deleteClick', row)"
+                  >
+                    지우기
+                  </button>
+                </div>
+              </transition>
             </div>
           </li>
         </transition-group>
       </draggable>
-      <!-- <div class="flex flex-row justify-center space-x-2 py-4">
-        <button
-          class="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded"
-          @click="emitEvent('sendKakaoFeed')"
-        >
-          공유하기(피드)
-        </button>
-        <button
-          class="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded"
-          @click="emitEvent('sendKakaoList')"
-        >
-          공유하기(리스트)
-        </button>
-      </div> -->
     </div>
   </div>
 </template>
@@ -165,6 +137,10 @@ export default {
     value: {
       type: Array,
       default: () => [],
+    },
+    isEditMode: {
+      type: Boolean,
+      default: null,
     },
   },
   computed: {
@@ -257,13 +233,81 @@ export default {
   padding-bottom: 8px;
 }
 
-.list-leave-active {
-  @apply absolute transform-gpu transition duration-1000;
+.list-move {
+  transition: transform 1s;
 }
-.list-leave {
+.list-enter-active {
+  animation: slide-in 0.3s ease-out forwards;
+  /* forwards = element가 finishing position에 붙어놓음  */
+  transition: opacity 0.2s;
+}
+
+.list-leave-active {
+  animation: slide-out 0.3s ease-out forwards;
+  transition: opacity 0.2s;
+  opacity: 0;
+  /* @apply absolute transform-gpu transition duration-1000; */
+}
+/* .list-leave {
   @apply opacity-100 translate-x-0 transition duration-1000;
 }
 .list-leave-to {
   @apply opacity-0 -translate-x-full transition duration-1000;
+} */
+
+/* @keyframes list-in {
+  from {
+    transform: translate-x-0(20px);
+  }
+  to {
+    transform: translate-x-full(0);
+  }
+}
+
+@keyframes list-out {
+  from {
+    transform: translate-x-0(0);
+  }
+  to {
+    transform: translate-x-full(20px);
+  }
+} */
+
+/* Slide transition using Animation property of CSS */
+.slide-enter {
+  /* keyframe에 이미 초기 상태를 정의해놔서 여기에 정의 안해도 됨 */
+}
+
+.slide-enter-active {
+  animation: slide-in 0.3s ease-out forwards;
+  /* forwards = element가 finishing position에 붙어놓음  */
+  transition: opacity 0.2s;
+}
+
+.slide-leave {
+}
+
+.slide-leave-active {
+  animation: slide-out 0.3s ease-out forwards;
+  transition: opacity 0.2s;
+  opacity: 0;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateY(20px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-out {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(20px);
+  }
 }
 </style>
