@@ -112,30 +112,30 @@ export default {
     },
   },
   mounted() {
-    this.menuData = [
-      {
-        id: 0,
-        section: "마을소식",
-        groupName: "news",
-        contents: this.news,
-      },
-      {
-        id: 1,
-        section: "마을모임",
-        groupName: "meetings",
-        contents: this.meetings,
-      },
-      {
-        id: 2,
-        section: "마을포토",
-        groupName: "photos",
-        contents: this.photos,
-      },
-    ];
+    // this.menuData = [
+    //   {
+    //     id: 0,
+    //     section: "마을소식",
+    //     groupName: "news",
+    //     contents: this.news,
+    //   },
+    //   {
+    //     id: 1,
+    //     section: "마을모임",
+    //     groupName: "meetings",
+    //     contents: this.meetings,
+    //   },
+    //   {
+    //     id: 2,
+    //     section: "마을포토",
+    //     groupName: "photos",
+    //     contents: this.photos,
+    //   },
+    // ];
   },
   data() {
     return {
-      menuData: [],
+      // menuData: [],
       isEditMode: false,
     };
   },
@@ -182,6 +182,9 @@ export default {
             },
           },
         ],
+        serverCallbackArgs: {
+          freetownId: "emthrology",
+        },
       });
     },
     /**
@@ -219,6 +222,9 @@ export default {
             },
           },
         ],
+        serverCallbackArgs: {
+          freetownId: "emthrology",
+        },
       });
     },
     /**

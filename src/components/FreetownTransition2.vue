@@ -7,7 +7,14 @@
       >
         {{ section }}
       </div>
+      <span
+        v-show="this.value.length === 0"
+        class="m-6 relative pb-2 border border-b-gray-200 border-white"
+      >
+        콘텐츠가 없습니다.
+      </span>
       <draggable
+        v-show="this.value.length > 0"
         :group="{ name: groupName, pull: false, put: false }"
         ghost-class="ghost"
         handle=".handle"
@@ -234,7 +241,7 @@ export default {
 }
 
 .list-move {
-  transition: transform 1s;
+  transition: transform 0.3s;
 }
 .list-enter-active {
   animation: slide-in 0.3s ease-out forwards;
@@ -248,30 +255,13 @@ export default {
   opacity: 0;
   /* @apply absolute transform-gpu transition duration-1000; */
 }
-/* .list-leave {
-  @apply opacity-100 translate-x-0 transition duration-1000;
+.list-leave {
+  @apply opacity-100 translate-x-0 transition duration-300;
 }
+
 .list-leave-to {
-  @apply opacity-0 -translate-x-full transition duration-1000;
-} */
-
-/* @keyframes list-in {
-  from {
-    transform: translate-x-0(20px);
-  }
-  to {
-    transform: translate-x-full(0);
-  }
+  @apply opacity-0 -translate-x-full transition duration-300;
 }
-
-@keyframes list-out {
-  from {
-    transform: translate-x-0(0);
-  }
-  to {
-    transform: translate-x-full(20px);
-  }
-} */
 
 /* Slide transition using Animation property of CSS */
 .slide-enter {
