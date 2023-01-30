@@ -182,6 +182,7 @@ export default {
             },
           },
         ],
+        //벡앤드로 보낼 파라미터 여기서 정의하면 카카오 콜백으로 전달됨
         serverCallbackArgs: {
           freetownId: "emthrology",
         },
